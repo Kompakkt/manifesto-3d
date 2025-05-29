@@ -4,4 +4,6 @@ export interface IExternalResourceData {
   id: string;
   index: number;
   profile: string | any[];
+  [`@id`]: string;
+  [`@context`]: string;
 }

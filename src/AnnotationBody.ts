@@ -1,16 +1,22 @@
 import {
   ExternalResourceType,
-  MediaType
+  MediaType,
 } from "@iiif/vocabulary/dist-commonjs";
-import { AnnotationBodyParser, IManifestoOptions, ManifestResource, Transform, TransformParser, Utils } from "./internal";
+import {
+  AnnotationBodyParser,
+  IManifestoOptions,
+  ManifestResource,
+  Transform,
+  TransformParser,
+  Utils,
+} from "./internal";
 
- 
 /**
 With the 3D extensions to the IIIF Presentation API the name of this
 class is misleading, but for now is being retained for the sake backward
 compatibility with earlier manifesto code and tests.
 
-The 3D extensions allow that the body property of an annotation can be 
+The 3D extensions allow that the body property of an annotation can be
 a light, camera, or model, or a SpecificResource object wrapping a light, camera,
 or model.
 **/
@@ -37,7 +43,7 @@ export class AnnotationBody extends ManifestResource {
   // in the code that supports Presentation 3
   getFormat(): MediaType | null {
     const format: string = this.getPropertyFromSelfOrSource("format");
- 
+
     if (format) {
       return Utils.getMediaType(format);
     }
@@ -49,9 +55,7 @@ export class AnnotationBody extends ManifestResource {
     const type: string = this.getPropertyFromSelfOrSource("type");
 
     if (type) {
-      return <ExternalResourceType>(
-        Utils.normaliseType(type)
-      );
+      return <ExternalResourceType>Utils.normaliseType(type);
     }
 
     return null;
@@ -66,14 +70,17 @@ export class AnnotationBody extends ManifestResource {
   }
 
   getTransform(): Transform[] {
-    return this.getProperty("transform").map((transform) => {
+    return this.getProperty("transform").map((transform: any) => {
       return TransformParser.BuildFromJson(transform);
     });
   }
 
   // Some properties may be on this object or (for SpecificResource) in source object
-  getPropertyFromSelfOrSource(prop): any {
-    if (this.isSpecificResource() && this.getSource() instanceof AnnotationBody) {
+  getPropertyFromSelfOrSource(prop: string): any {
+    if (
+      this.isSpecificResource() &&
+      this.getSource() instanceof AnnotationBody
+    ) {
       return (this.getSource() as AnnotationBody).getProperty(prop);
     } else {
       return this.getProperty(prop);
@@ -82,14 +89,14 @@ export class AnnotationBody extends ManifestResource {
 
   // Get the first source available on the annotation body, if any
   getSource(): AnnotationBody | string | null {
-    const source: object = ([].concat(this.getPropertyAsObject("source")))[0];
+    const source: any = [].concat(this.getPropertyAsObject("source"))[0];
 
     if (source) {
       if (source["isIRI"] === true) {
         return source["id"];
       } else {
         return AnnotationBodyParser.BuildFromJson(source, this.options);
-      }   
+      }
     }
 
     return null;
@@ -98,9 +105,8 @@ export class AnnotationBody extends ManifestResource {
   isModel(): boolean {
     return this.getType() === ExternalResourceType.MODEL;
   }
-  
+
   isSpecificResource(): boolean {
     return this.getProperty("type") === "SpecificResource";
   }
-
 }

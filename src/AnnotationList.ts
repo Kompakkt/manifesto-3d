@@ -11,7 +11,7 @@ export class AnnotationList extends JSONLDResource {
   label: string;
   isLoaded!: boolean;
 
-  constructor(label, jsonld?: any, options?: IManifestoOptions) {
+  constructor(label: string, jsonld?: any, options?: IManifestoOptions) {
     super(jsonld);
     this.label = label;
     this.options = <IManifestoOptions>options;
@@ -27,7 +27,9 @@ export class AnnotationList extends JSONLDResource {
 
   getResources(): Annotation[] {
     const resources = this.getProperty("resources");
-    return resources.map((resource) => new Annotation(resource, this.options));
+    return resources.map(
+      (resource: any) => new Annotation(resource, this.options),
+    );
   }
 
   load(): Promise<AnnotationList> {

@@ -316,7 +316,7 @@ export class Utils {
     return Deserialiser.parse(manifest, options);
   }
 
-  static checkStatus(response) {
+  static checkStatus(response: any) {
     if (response.ok) {
       return response;
     } else {

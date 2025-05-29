@@ -240,11 +240,11 @@ export class Canvas extends Resource {
   }
 
   getOtherContent(): Promise<AnnotationList[]> {
-    const otherContent = Array.isArray(this.getProperty("otherContent"))
+    const otherContent: any[] = Array.isArray(this.getProperty("otherContent"))
       ? this.getProperty("otherContent")
       : [this.getProperty("otherContent")];
 
-    const canonicalComparison = (typeA, typeB): boolean => {
+    const canonicalComparison = (typeA: unknown, typeB: unknown): boolean => {
       if (typeof typeA !== "string" || typeof typeB !== "string") {
         return false;
       }
@@ -317,7 +317,7 @@ export class Canvas extends Resource {
   }
 
   get imageResources() {
-    const resources = flattenDeep([
+    const resources: any[] = flattenDeep([
       this.getImages().map((i) => i.getResource()),
       this.getContent().map((i) => i.getBody()),
     ]);
@@ -332,7 +332,7 @@ export class Canvas extends Resource {
                 images: flatten([
                   resource.getProperty("default"),
                   resource.getProperty("item"),
-                ]).map((r) => ({ resource: r })),
+                ]).map((r: any) => ({ resource: r })),
               },
               this.options,
             )
@@ -353,11 +353,11 @@ export class Canvas extends Resource {
    * Returns a given resource Annotation, based on a contained resource or body
    * id
    */
-  resourceAnnotation(id) {
+  resourceAnnotation(id: string) {
     return this.resourceAnnotations.find(
-      (anno) =>
+      (anno: any) =>
         anno.getResource().id === id ||
-        flatten(new Array(anno.getBody())).some((body) => body.id === id),
+        flatten(new Array(anno.getBody())).some((body: any) => body.id === id),
     );
   }
 
@@ -365,7 +365,7 @@ export class Canvas extends Resource {
    * Returns the fragment placement values if a resourceAnnotation is placed on
    * a canvas somewhere besides the full extent
    */
-  onFragment(id) {
+  onFragment(id: string) {
     const resourceAnnotation = this.resourceAnnotation(id);
     if (!resourceAnnotation) return undefined;
     // IIIF v2
@@ -377,17 +377,17 @@ export class Canvas extends Resource {
     }
     const fragmentMatch = (on || target).match(/xywh=(.*)$/);
     if (!fragmentMatch) return undefined;
-    return fragmentMatch[1].split(",").map((str) => parseInt(str, 10));
+    return fragmentMatch[1].split(",").map((str: string) => parseInt(str, 10));
   }
 
   get iiifImageResources() {
     return this.imageResources.filter(
-      (r) => r && r.getServices()[0] && r.getServices()[0].id,
+      (r: any) => r && r.getServices()[0] && r.getServices()[0].id,
     );
   }
 
   get imageServiceIds() {
-    return this.iiifImageResources.map((r) => r.getServices()[0].id);
+    return this.iiifImageResources.map((r: any) => r.getServices()[0].id);
   }
 
   get aspectRatio() {
