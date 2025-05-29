@@ -7,19 +7,19 @@ import {
   TreeNode,
   Service,
   IManifestoOptions,
-  Collection
+  Collection,
 } from "./internal";
 import {
   IIIFResourceType,
-  ServiceProfile
+  ServiceProfile,
 } from "@iiif/vocabulary/dist-commonjs";
 
 export class IIIFResource extends ManifestResource {
-  public defaultTree: TreeNode;
+  public defaultTree!: TreeNode;
   public index: number = -1;
   public isLoaded: boolean = false;
-  public parentCollection: Collection;
-  public parentLabel: string;
+  public parentCollection!: Collection;
+  public parentLabel!: string;
 
   constructor(jsonld?: any, options?: IManifestoOptions) {
     super(jsonld, options);
@@ -28,7 +28,7 @@ export class IIIFResource extends ManifestResource {
       defaultLabel: "-",
       locale: "en-GB",
       resource: <IIIFResource>this,
-      pessimisticAccessControl: false
+      pessimisticAccessControl: false,
     };
 
     this.options = Object.assign(defaultOptions, options);
@@ -101,7 +101,7 @@ export class IIIFResource extends ManifestResource {
   getLicense(): string | null {
     return Utils.getLocalisedValue(
       this.getProperty("license"),
-      this.options.locale
+      this.options.locale,
     );
   }
 
@@ -180,7 +180,7 @@ export class IIIFResource extends ManifestResource {
 
   load(): Promise<IIIFResource> {
     let that = this;
-    return new Promise<IIIFResource>(resolve => {
+    return new Promise<IIIFResource>((resolve) => {
       if (that.isLoaded) {
         resolve(that);
       } else {
@@ -193,7 +193,7 @@ export class IIIFResource extends ManifestResource {
           id = that.__jsonld["@id"];
         }
 
-        Utils.loadManifest(id).then(function(data) {
+        Utils.loadManifest(id).then(function (data) {
           that.parentLabel = <string>that.getLabel().getValue(options.locale);
           const parsed = Deserialiser.parse(data, options);
           that = Object.assign(that, parsed);

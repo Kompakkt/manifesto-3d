@@ -1,8 +1,8 @@
 import { PropertyValue } from "./internal";
 
 export class LabelValuePair {
-  public label: PropertyValue | null;
-  public value: PropertyValue | null;
+  public label!: PropertyValue | null;
+  public value!: PropertyValue | null;
   public defaultLocale: string;
   public resource: any;
 
@@ -37,7 +37,7 @@ export class LabelValuePair {
 
   public getValue(
     locale?: string | string[],
-    joinWith: string = "<br/>"
+    joinWith: string = "<br/>",
   ): string | null {
     if (this.value === null) {
       return null;

@@ -7,16 +7,16 @@ import {
   LabelValuePair,
   PropertyValue,
   IManifestoOptions,
-  IExternalResource
+  IExternalResource,
 } from "./internal";
 import {
   ServiceProfile,
   RenderingFormat,
-  IIIFResourceType
+  IIIFResourceType,
 } from "@iiif/vocabulary/dist-commonjs";
 
 export class ManifestResource extends JSONLDResource {
-  externalResource: IExternalResource;
+  externalResource!: IExternalResource;
   options: IManifestoOptions;
 
   constructor(jsonld: any, options?: IManifestoOptions) {
@@ -29,15 +29,15 @@ export class ManifestResource extends JSONLDResource {
   }
 
   /**
-  * returns the PropertyValue which in turn allows a language-specific string
-  * encoded in the json as the "label" property
-  * @example
-  * var label = manifest.getLabel().getValue(); // returns the string for default locale
-  * 
-  * @example
-  * var label = manifest.getLabel().getValue(locale); // locale a string , examples
-  *                                                   // would be "fr", "en-US",
-  **/
+   * returns the PropertyValue which in turn allows a language-specific string
+   * encoded in the json as the "label" property
+   * @example
+   * var label = manifest.getLabel().getValue(); // returns the string for default locale
+   *
+   * @example
+   * var label = manifest.getLabel().getValue(locale); // locale a string , examples
+   *                                                   // would be "fr", "en-US",
+   **/
   getLabel(): PropertyValue {
     const label: any = this.getProperty("label");
 
@@ -47,7 +47,7 @@ export class ManifestResource extends JSONLDResource {
 
     return new PropertyValue([], this.options.locale);
   }
-  
+
   getSummary(): PropertyValue {
     const summary: any = this.getProperty("summary");
 
@@ -72,7 +72,7 @@ export class ManifestResource extends JSONLDResource {
     for (let i = 0; i < _metadata.length; i++) {
       const item: any = _metadata[i];
       const metadataItem: LabelValuePair = new LabelValuePair(
-        this.options.locale
+        this.options.locale,
       );
       metadataItem.parse(item);
       metadata.push(metadataItem);
@@ -177,12 +177,15 @@ export class ManifestResource extends JSONLDResource {
     return this.getIIIFResourceType() === IIIFResourceType.RANGE;
   }
 
-  // this different implementation is necessary until such time as the 
+  // this different implementation is necessary until such time as the
   // SCENE is added to the @iiif/vocabulary package.
   isScene(): boolean {
-    return this.getIIIFResourceType() === <IIIFResourceType>Utils.normaliseType('Scene');
+    return (
+      this.getIIIFResourceType() ===
+      <IIIFResourceType>Utils.normaliseType("Scene")
+    );
   }
-  
+
   isSequence(): boolean {
     return this.getIIIFResourceType() === IIIFResourceType.SEQUENCE;
   }

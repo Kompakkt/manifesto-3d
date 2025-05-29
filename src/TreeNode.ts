@@ -3,12 +3,12 @@ import { TreeNodeType, Utils } from "./internal";
 export class TreeNode {
   public data: any;
   public nodes: TreeNode[];
-  public selected: boolean;
-  public expanded: boolean;
-  public id: string;
+  public selected!: boolean;
+  public expanded!: boolean;
+  public id!: string;
   public label: string;
-  public navDate: Date;
-  public parentNode: TreeNode;
+  public navDate!: Date;
+  public parentNode!: TreeNode;
 
   constructor(label?: string, data?: any) {
     this.label = <string>label;

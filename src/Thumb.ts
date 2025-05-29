@@ -10,7 +10,7 @@ export class Thumb {
   public label: string;
   public width: number;
   public height: number;
-  public visible: boolean;
+  public visible!: boolean;
   public viewingHint: ViewingHint | null;
 
   constructor(width: number, canvas: Canvas) {
